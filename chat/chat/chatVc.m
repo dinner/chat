@@ -229,38 +229,52 @@
         chartMessage.date = mes.date;
         
         Mes* mesFirstObject = (Mes*)[fetchedObjects objectAtIndex:i];
-        ChartCellFrame* cellFrameFar = [self.cellFrames objectAtIndex:0];
-        NSDate* dateDataSource = [util stringToDate:cellFrameFar.m_strDate];
-        NSDate* dateDataKu = mesFirstObject.date;
+//
+        NSDate* dateDataSource;
+        NSDate* dateDataKu;
         
-    if ([[dateDataSource laterDate:dateDataKu] isEqual:dateDataSource] == YES)
-        NSLog(@"\n数据源最小时间：%@ \n数据库查找到的数据的时间：%@\n内容：%@",dateDataSource,dateDataKu,mes.content);
-        NSLog(@"%d",chartMessage.mesType);
-        if (mes.type != [NSNumber numberWithInt:e_timeInterval]) {
-            NSString* strFrom = mes.from;
-            NSString* strHead = [configDic objectForKey:@"selfUserHeaderUrl"];
-            
-            if ([mes.type intValue] == e_pic) {//图片
-                chartMessage.picType = e_serverImg;
-            }
-            
-            if ([strFrom isEqualToString:self.m_strSelfId]) {
-                chartMessage.messageType = kMessageTo;
-                chartMessage.icon = strHead;
-            }
-            else{
-                chartMessage.messageType = kMessageFrom;
-                chartMessage.icon = self.m_strFriendHeadUrl;
-            }
-            cellFrame.chartMessage = chartMessage;
+        if (self.cellFrames.count == 0) {
+            dateDataSource = [NSDate distantFuture];
+            dateDataKu = mesFirstObject.date;
         }
         else{
-            cellFrame.m_mesType = e_timeInterval;
-            cellFrame.m_strDate = [util dateToString:mes.date];
-            cellFrame.cellHeight = TIME_CELLHEIGHT;
-            cellFrame.chartMessage = chartMessage;
+            ChartCellFrame* cellFrameFar = [self.cellFrames objectAtIndex:0];
+            dateDataSource = [util stringToDate:cellFrameFar.m_strDate];
+            dateDataKu = mesFirstObject.date;
         }
-        [self.cellFrames insertObject:cellFrame atIndex:0];
+        
+//    if ([[dateDataSource laterDate:dateDataKu] isEqual:dateDataKu] == YES)
+        if ([dateDataSource compare:dateDataKu] == NSOrderedDescending) {
+            NSLog(@"\n数据源最小时间：%@ \n数据库查找到的数据的时间：%@\n内容：%@",dateDataSource,dateDataKu,mes.content);
+            NSLog(@"%d",chartMessage.mesType);
+            if (mes.type != [NSNumber numberWithInt:e_timeInterval]){//不是时间
+                if ([mes.type intValue] != e_timeInterval) {//不是时间
+                    NSString* strFrom = mes.from;
+                    NSString* strHead = [configDic objectForKey:@"selfUserHeaderUrl"];
+
+                    if ([mes.type intValue] == e_pic) {//图片
+                        chartMessage.picType = e_serverImg;
+                    }
+
+                    if ([strFrom isEqualToString:self.m_strSelfId]) {
+                        chartMessage.messageType = kMessageTo;
+                        chartMessage.icon = strHead;
+                    }
+                    else{
+                        chartMessage.messageType = kMessageFrom;
+                        chartMessage.icon = self.m_strFriendHeadUrl;
+                    }
+                    cellFrame.chartMessage = chartMessage;
+                }
+                else{//是时间
+                    cellFrame.m_mesType = e_timeInterval;
+                    cellFrame.m_strDate = [util dateToString:mes.date];
+                    cellFrame.cellHeight = TIME_CELLHEIGHT;
+                    cellFrame.chartMessage = chartMessage;
+                }
+                [self.cellFrames insertObject:cellFrame atIndex:0];
+        }
+    }
     }
     
     //刷新table
@@ -736,7 +750,7 @@
     [textFiled setText:NULL_STR];
     
     [self judgeTimeJiange];
-    [self saveInfoToDb:strText type:e_text from:self.m_strSelfId to:self.m_strFriendId];
+//    [self saveInfoToDb:strText type:e_text from:self.m_strSelfId to:self.m_strFriendId];
     [self mesSend:strText mesType:e_text];
 }
 //存储到数据酷
@@ -753,6 +767,29 @@
     contactMode.type = [NSNumber numberWithInt:e];//消息类型
     contactMode.author = self.m_strSelfId;
 //    contactMode.singleOrGroup = ZBMessageSingleChat;
+    //
+    NSError* error;
+    if (![contetx save:&error]) {
+        NSLog(@"error");
+    }
+    else{
+        NSLog(@"插入成功");
+    }
+}
+
+-(void)saveInfoToDb:(NSString*)strMes type:(enum mesType_enum)e from:(NSString*)from to:(NSString*)to date:(NSDate*)date{
+    AppDelegate* dele = (AppDelegate*)[UIApplication sharedApplication].delegate;
+    NSManagedObjectContext* contetx = [dele managedObjectContext];
+    Mes* contactMode = [NSEntityDescription insertNewObjectForEntityForName:@"Mes" inManagedObjectContext:contetx];
+    contactMode.from = from;
+    contactMode.to = to;
+//    NSDate* date = [NSDate date];
+    contactMode.date = date;
+    //解析
+    contactMode.content = strMes;
+    contactMode.type = [NSNumber numberWithInt:e];//消息类型
+    contactMode.author = self.m_strSelfId;
+    //    contactMode.singleOrGroup = ZBMessageSingleChat;
     //
     NSError* error;
     if (![contetx save:&error]) {
@@ -802,6 +839,8 @@
     [message addChild:body];
     [xmppStream sendElement:message];
 
+    [self saveInfoToDb:strText type:e_text from:self.m_strSelfId to:self.m_strFriendId date:date];
+    
     if (e != e_pic) {//非图片才刷新列表
         ChartCellFrame *cellFrame=[[ChartCellFrame alloc]init];
         ChartMessage *chartMessage=[[ChartMessage alloc]init];

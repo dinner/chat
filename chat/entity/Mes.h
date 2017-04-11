@@ -1,8 +1,8 @@
 //
-//  Message.h
+//  Mes.h
 //  chat
 //
-//  Created by zhanglingxiang on 17/4/7.
+//  Created by zhanglingxiang on 17/4/11.
 //  Copyright © 2017年 zhanglingxiang. All rights reserved.
 //
 
@@ -11,10 +11,10 @@
 @interface Mes : NSManagedObject
 
 @property (nonatomic,retain) NSString* author;
-@property (nonatomic, retain) NSString * from;
-@property (nonatomic, retain) NSString * to;
 @property (nonatomic, retain) NSString * content;
 @property (nonatomic, retain) NSDate * date;
-@property (nonatomic, retain) NSNumber * type;
+@property (nonatomic, retain) NSString * from;
+@property (nonatomic, retain) NSString * to;
+@property (nonatomic, retain) NSNumber* type;
 
 @end
