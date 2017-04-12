@@ -15,6 +15,6 @@
 @property (nonatomic, retain) NSDate * date;
 @property (nonatomic, retain) NSString * from;
 @property (nonatomic, retain) NSString * to;
-@property (nonatomic, retain) NSNumber* type;
+@property (nonatomic, assign) NSInteger type;
 
 @end

@@ -11,17 +11,13 @@
 #define ScreenWidth     CGRectGetWidth(ScreenBounds)
 #define ScreenHeight    CGRectGetHeight(ScreenBounds)
 
-#define IP              @"23.106.155.217:8443"
-//#define IP              @"127.0.0.1:8080"
+#define IP              @"127.0.0.1:8080"
 
-#define SERVER          [NSString stringWithFormat:@"https://%@/calendar",IP]
-#define IMGSERVER       [NSString stringWithFormat:@"https://%@/calendar/upload",IP]
+#define SERVER          [NSString stringWithFormat:@"",IP]
+//#define IMGSERVER       [NSString stringWithFormat:@"",IP]
 
-//#define SERVER          [NSString stringWithFormat:@"http://%@/test0811",IP]
-//#define IMGSERVER       [NSSswsstring stringWithFormat:@"http://%@/test0811/upload",IP]
-
-#define OPENFIRE_SERVER @"23.106.155.217"
-#define OPENFIRE_DOMAIN @"zhang"
+#define OPENFIRE_SERVER @""
+#define OPENFIRE_DOMAIN @""
 #define OFFICIAL_ID     @"admin"//官方id
 #define OFFICIAL_HEAD   @"officer"//官方图片
 
@@ -65,7 +61,7 @@ enum mesSource_enum{
 };
 
 enum mesType_enum{
-    e_text,e_audio,e_pic,e_timeInterval
+    e_text=0,e_audio,e_pic,e_timeInterval
 };
 
 #ifndef __IPHONE_3_0

@@ -225,7 +225,9 @@
         ChartCellFrame* cellFrame = [[ChartCellFrame alloc] init];
         ChartMessage* chartMessage = [[ChartMessage alloc] init];
         chartMessage.content = mes.content;
-        chartMessage.mesType = mes.type.intValue;
+        
+        NSLog(@"%@",mes);
+        chartMessage.mesType = mes.type;
         chartMessage.date = mes.date;
         
         Mes* mesFirstObject = (Mes*)[fetchedObjects objectAtIndex:i];
@@ -243,16 +245,15 @@
             dateDataKu = mesFirstObject.date;
         }
         
-//    if ([[dateDataSource laterDate:dateDataKu] isEqual:dateDataKu] == YES)
         if ([dateDataSource compare:dateDataKu] == NSOrderedDescending) {
             NSLog(@"\n数据源最小时间：%@ \n数据库查找到的数据的时间：%@\n内容：%@",dateDataSource,dateDataKu,mes.content);
             NSLog(@"%d",chartMessage.mesType);
-            if (mes.type != [NSNumber numberWithInt:e_timeInterval]){//不是时间
-                if ([mes.type intValue] != e_timeInterval) {//不是时间
+            if (mes.type != e_timeInterval){//不是时间
+                if (mes.type != e_timeInterval) {//不是时间
                     NSString* strFrom = mes.from;
                     NSString* strHead = [configDic objectForKey:@"selfUserHeaderUrl"];
 
-                    if ([mes.type intValue] == e_pic) {//图片
+                    if (mes.type == e_pic) {//图片
                         chartMessage.picType = e_serverImg;
                     }
 
@@ -276,7 +277,6 @@
         }
     }
     }
-    
     //刷新table
     dispatch_async(dispatch_get_main_queue(), ^{
         [self.tableView reloadData];
@@ -764,7 +764,7 @@
     contactMode.date = date;
     //解析
     contactMode.content = strMes;
-    contactMode.type = [NSNumber numberWithInt:e];//消息类型
+    contactMode.type = e;//消息类型
     contactMode.author = self.m_strSelfId;
 //    contactMode.singleOrGroup = ZBMessageSingleChat;
     //
@@ -788,6 +788,7 @@
     //解析
     contactMode.content = strMes;
     contactMode.type = [NSNumber numberWithInt:e];//消息类型
+//    NSLog(@"%@",contactMode.type);
     contactMode.author = self.m_strSelfId;
     //    contactMode.singleOrGroup = ZBMessageSingleChat;
     //
@@ -839,7 +840,7 @@
     [message addChild:body];
     [xmppStream sendElement:message];
 
-    [self saveInfoToDb:strText type:e_text from:self.m_strSelfId to:self.m_strFriendId date:date];
+    [self saveInfoToDb:strText type:e from:self.m_strSelfId to:self.m_strFriendId date:date];
     
     if (e != e_pic) {//非图片才刷新列表
         ChartCellFrame *cellFrame=[[ChartCellFrame alloc]init];
