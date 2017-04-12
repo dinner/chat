@@ -14,7 +14,7 @@
 #define IP              @"127.0.0.1:8080"
 
 #define SERVER          [NSString stringWithFormat:@"",IP]
-//#define IMGSERVER       [NSString stringWithFormat:@"",IP]
+#define IMGSERVER       [NSString stringWithFormat:@"",IP]
 
 #define OPENFIRE_SERVER @""
 #define OPENFIRE_DOMAIN @""

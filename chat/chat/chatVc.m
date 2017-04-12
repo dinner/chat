@@ -134,7 +134,6 @@
     
     //配置文件读取
     [self readConfig];
-    
 }
 
 -(void)readConfig{
@@ -231,7 +230,7 @@
         chartMessage.date = mes.date;
         
         Mes* mesFirstObject = (Mes*)[fetchedObjects objectAtIndex:i];
-//
+
         NSDate* dateDataSource;
         NSDate* dateDataKu;
         
@@ -241,13 +240,14 @@
         }
         else{
             ChartCellFrame* cellFrameFar = [self.cellFrames objectAtIndex:0];
-            dateDataSource = [util stringToDate:cellFrameFar.m_strDate];
+            dateDataSource = cellFrameFar.chartMessage.date;
             dateDataKu = mesFirstObject.date;
+            
+            NSLog(@"\n数据源最小时间：%@ \n数据库查找到的数据的时间：%@\n内容：%@",dateDataSource,dateDataKu,mes.content);
+            NSLog(@"%d",chartMessage.mesType);
         }
         
         if ([dateDataSource compare:dateDataKu] == NSOrderedDescending) {
-            NSLog(@"\n数据源最小时间：%@ \n数据库查找到的数据的时间：%@\n内容：%@",dateDataSource,dateDataKu,mes.content);
-            NSLog(@"%d",chartMessage.mesType);
             if (mes.type != e_timeInterval){//不是时间
                 if (mes.type != e_timeInterval) {//不是时间
                     NSString* strFrom = mes.from;
@@ -787,7 +787,7 @@
     contactMode.date = date;
     //解析
     contactMode.content = strMes;
-    contactMode.type = [NSNumber numberWithInt:e];//消息类型
+    contactMode.type = e;//消息类型
 //    NSLog(@"%@",contactMode.type);
     contactMode.author = self.m_strSelfId;
     //    contactMode.singleOrGroup = ZBMessageSingleChat;
@@ -840,6 +840,7 @@
     [message addChild:body];
     [xmppStream sendElement:message];
 
+    NSLog(@"%@",date);
     [self saveInfoToDb:strText type:e from:self.m_strSelfId to:self.m_strFriendId date:date];
     
     if (e != e_pic) {//非图片才刷新列表
@@ -880,7 +881,7 @@
         NSDate* date = [NSDate date];
         contactMode.date = date;
         //解析
-        contactMode.type = [NSNumber numberWithInt:e_timeInterval];//消息类型
+        contactMode.type = e_timeInterval;//消息类型
         contactMode.author = self.m_strSelfId;
         contactMode.from = self.m_strSelfId;
         contactMode.to = self.m_strFriendId;
