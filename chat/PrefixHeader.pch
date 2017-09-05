@@ -1,0 +1,78 @@
+//
+// Prefix header for all source files of the 'UINavigationTest' target in the 'UINavigationTest' project
+//
+
+#import <Availability.h>
+
+
+#define NULL_STR        @""
+#define mode_weather_none   0
+#define ScreenBounds    [[UIScreen mainScreen] bounds]
+#define ScreenWidth     CGRectGetWidth(ScreenBounds)
+#define ScreenHeight    CGRectGetHeight(ScreenBounds)
+
+#define IP              @"127.0.0.1:8080"
+
+#define SERVER          [NSString stringWithFormat:@"",IP]
+#define IMGSERVER       [NSString stringWithFormat:@"",IP]
+
+#define OPENFIRE_SERVER @""
+#define OPENFIRE_DOMAIN @""
+#define OFFICIAL_ID     @"admin"//官方id
+#define OFFICIAL_HEAD   @"officer"//官方图片
+
+#define RECEIVE_MES     @"receiveMes"
+#define PIC_SEND_SUC    @"picSendSuc"
+
+#define AES_KEY         @"AES_KEY"
+
+#define KFacialSizeWidth    17
+
+#define KFacialSizeHeight   17
+
+#define KCharacterWidth     8
+
+#define VIEW_LINE_HEIGHT    16
+
+#define VIEW_LEFT           1
+
+#define VIEW_RIGHT          8
+
+#define VIEW_TOP            8
+
+#define VIEW_WIDTH_MAX      200
+
+#define FONT_SIZE           15
+
+#define TIMEOUT_SECOND      5
+
+#define IMG_CLICKED        @"imageCli"
+
+enum mode_enum{
+    e_usual=1,e_happy,e_notHappy,e_sad,e_anger
+};
+
+enum weather_enum{
+    e_sunn=1,e_cloudy,e_windy,e_rainy,e_thunder
+};
+
+enum mesSource_enum{
+    e_official,e_friend,e_group
+};
+
+enum mesType_enum{
+    e_text=0,e_audio,e_pic,e_timeInterval
+};
+
+#ifndef __IPHONE_3_0
+#warning "This project uses features only available in iOS SDK 3.0 and later."
+#endif
+
+#import "util.h"
+
+#ifdef __OBJC__
+#import <UIKit/UIKit.h>
+#import <Foundation/Foundation.h>
+#import <CoreData/CoreData.h>
+
+#endif
