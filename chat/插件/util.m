@@ -27,6 +27,13 @@
     return strDate;
 }
 
++(NSString*)dateToString:(NSDate*)date formate:(NSString*)strFormate{
+    NSDateFormatter* formater = [[NSDateFormatter alloc] init];
+    [formater setDateFormat:strFormate];
+    NSString* strDate = [formater stringFromDate:date];
+    return strDate;
+}
+
 +(void)showTheMbprogressView:(NSString*)str view:(UIView*)view{
     MBProgressHUD* hud = [[MBProgressHUD alloc] initWithView:view];
     [view addSubview:hud];

@@ -15,6 +15,7 @@
 
 +(NSDate*)stringToDate:(NSString*)strDate;
 +(NSString*)dateToString:(NSDate*)date;
++(NSString*)dateToString:(NSDate*)date formate:(NSString*)strFormate;
 
 //+(mesStr*)getMesStrFromXmppMessage:(XMPPMessage*)message;
 

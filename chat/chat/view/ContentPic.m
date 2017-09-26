@@ -87,21 +87,24 @@
     [self addMask];
     
     AFHTTPRequestOperationManager * manager = [AFHTTPRequestOperationManager manager];
+    AFSecurityPolicy *securityPolicy = [AFSecurityPolicy defaultPolicy];
+    securityPolicy.allowInvalidCertificates = YES;
+    securityPolicy.validatesDomainName = YES;
+    manager.securityPolicy  = securityPolicy;
     manager.responseSerializer = [AFHTTPResponseSerializer serializer];
     NSString* strPostUrl = [NSString stringWithFormat:@"%@/imageUpload",SERVER];
-    AFHTTPRequestOperation  * o2= [manager POST:strPostUrl parameters:nil                                  constructingBodyWithBlock:^(id<AFMultipartFormData> formData) {
+    AFHTTPRequestOperation *o2= [manager POST:strPostUrl parameters:nil                                  constructingBodyWithBlock:^(id<AFMultipartFormData> formData) {
         NSData * data=UIImagePNGRepresentation(image);
         [formData appendPartWithFileData:data name:@"file"fileName:@"111icon.png"mimeType:@"image/png"];
     }success:^(AFHTTPRequestOperation *operation,id responseObject){
         NSLog(@"%@",[[NSString alloc]initWithData:responseObject encoding:NSUTF8StringEncoding]);
         [self removeMask];
-//        self.m_cellFrame.m_bIsUploadOrDownloadSuc = YES;
         self.m_cellFrame.fileUploadOrDownLoadManager.bIsSuc = YES;
         NSDictionary* dic = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingMutableContainers error:nil];
         NSString* strHeadUrl = dic[@"url"];
         [[NSNotificationCenter defaultCenter] postNotificationName:PIC_SEND_SUC object:nil userInfo:[NSDictionary dictionaryWithObject:strHeadUrl forKey:@"picUrl"]];
     }failure:^(AFHTTPRequestOperation *operation,NSError *error) {
-        
+        NSLog(@"图片上传失败");
     }];
     
     //设置上传操作的进度
@@ -172,11 +175,9 @@
 -(void)setLocalImage:(UIImage*)image{
     [self setImage:image];
     @synchronized(image){
-//    if (self.m_cellFrame.m_bIsUploadOrDownloadSuc == NO) {
         if (self.m_cellFrame.fileUploadOrDownLoadManager.bIsSuc == NO) {
-//        UIImage* image = [UIImage imageWithContentsOfFile:url];
-        [self upload:image];
-    }
+            [self upload:image];
+        }
     }
 }
 

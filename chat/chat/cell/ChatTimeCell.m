@@ -17,7 +17,7 @@
 @implementation ChatTimeCell
 
 - (void)awakeFromNib {
-    // Initialization code
+
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {
@@ -32,7 +32,7 @@
         self.lb_time = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 100, 20.f)];
         [self.lb_time setTextColor:[UIColor lightGrayColor]];
         [self.lb_time setFont:[UIFont systemFontOfSize:12.f]];
-//        [self.lb_time setText:@"sdff"];
+//        [self.lb_time setText:@""];
 //        [self.lb_time sizeToFit];
 //        [self setBackgroundColor:[UIColor colorWithRed:240/255.f green:240/255.f blue:240/255.f alpha:1.f]];
         [self.lb_time setCenter:self.center];

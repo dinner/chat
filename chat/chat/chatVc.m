@@ -35,6 +35,8 @@
     NSString* audioFileName,*mp3FileName;//
     AVAudioRecorder* recorder;
     NSMutableDictionary* configDic;
+    
+    NSMutableArray* dataSourceTimeAr;
 }
 @property(retain,nonatomic) UITableView* tableView;
 @property(retain,nonatomic) KeyBordVIew* keyBordView;
@@ -129,6 +131,7 @@
 //数据初始化
 -(void)dataInit{
     self.cellFrames = [NSMutableArray array];
+    dataSourceTimeAr = [NSMutableArray array];
     scrollOffset = 0.f;
     nPage = 0;
     
@@ -248,8 +251,9 @@
             NSLog(@"\n数据源最小时间：%@ \n数据库查找到的数据的时间：%@\n内容：%@",dateDataSource,dateDataKu,mes.content);
             NSLog(@"%d",chartMessage.mesType);
         }
-        
-        if ([dateDataSource compare:dateDataKu] == NSOrderedDescending) {
+        NSString* strDateDataSource = [util dateToString:dateDataSource formate:@"yyyy-MM-dd HH:mm:ss zzz"];
+        NSString* strDateDataKu = [util dateToString:dateDataKu formate:@"yyyy-MM-dd HH:mm:ss zzz"];
+        if (([dateDataSource compare:dateDataKu] == NSOrderedDescending) && (![strDateDataKu isEqualToString: strDateDataSource])) {
             if (mes.type != e_timeInterval){//不是时间
                 if (mes.type != e_timeInterval) {//不是时间
                     NSString* strFrom = mes.from;
@@ -997,8 +1001,5 @@
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillChangeFrameNotification object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillHideNotification object:nil];
 }
-
-
-
 
 @end
