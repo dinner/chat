@@ -11,9 +11,9 @@
 #define ScreenWidth     CGRectGetWidth(ScreenBounds)
 #define ScreenHeight    CGRectGetHeight(ScreenBounds)
 
-#define IP              @"23.106.155.217:8443"
+#define IP              @""
 
-#define SERVER          [NSString stringWithFormat:@"https://%@/calendar",IP]
+#define SERVER          [NSString stringWithFormat:@"https://%@",IP]
 #define IMGSERVER       [NSString stringWithFormat:@"%@/upload",SERVER]
 
 #define OPENFIRE_SERVER @""
