@@ -49,6 +49,7 @@
     [self checkTheNetworkStatus];
     
     _downloadUrlAr = [NSMutableArray array];
+    _uploadPicAr = [NSMutableArray array];
     
     NSLog(@"%@",NSHomeDirectory());
     return YES;

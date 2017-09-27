@@ -15,5 +15,6 @@
 @property (retain,nonatomic) ChartCellFrame* cellFrame;
 
 -(void)drawTheLable:(ChartCellFrame*)info;//绘制label
+-(void)setTheLabel:(NSArray*)array;
 
 @end

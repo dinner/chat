@@ -36,7 +36,7 @@
     AVAudioRecorder* recorder;
     NSMutableDictionary* configDic;
     
-    NSMutableArray* dataSourceTimeAr;
+    NSMutableDictionary* dataSourcePicCellDic;
 }
 @property(retain,nonatomic) UITableView* tableView;
 @property(retain,nonatomic) KeyBordVIew* keyBordView;
@@ -131,7 +131,7 @@
 //数据初始化
 -(void)dataInit{
     self.cellFrames = [NSMutableArray array];
-    dataSourceTimeAr = [NSMutableArray array];
+    dataSourcePicCellDic = [NSMutableDictionary dictionary];
     scrollOffset = 0.f;
     nPage = 0;
     
@@ -438,8 +438,10 @@
     int count = self.cellFrames.count;
     return self.cellFrames.count;
 }
+
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    BOOL isAddToPicDic = NO;
     ChartCellFrame* cellFrame = self.cellFrames[indexPath.row];
     if (cellFrame.m_mesType == e_timeInterval) {//时间间隔
         ChatTimeCell* cell = [tableView dequeueReusableCellWithIdentifier:@"timeCell"];
@@ -461,7 +463,12 @@
             }
             else if (cellFrame.chartMessage.mesType == e_pic){//pic
                 cellIdentifier = @"From_pic";
-                cell = (ChartCell*)[tableView cellForRowAtIndexPath:indexPath];
+                if (cellFrame.fileUploadOrDownLoadManager.bIsSuc == YES) {
+                    cell = (ChartCell*)[tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+                }
+                else{
+                    cell = (ChartCell*)[tableView cellForRowAtIndexPath:indexPath];
+                }
             }
             else{//audio
                 cellIdentifier = @"From_audio";
@@ -475,6 +482,21 @@
             }
             else if (cellFrame.chartMessage.mesType == e_pic){//pic
                 cellIdentifier = @"To_pic";
+                /*
+                if (cellFrame.fileUploadOrDownLoadManager.bIsSuc == YES) {
+                    cell = (ChartCell*)[tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+                }
+                else{
+                    NSUInteger index = self.cellFrames.count - indexPath.row;
+                    if ([dataSourcePicCellDic objectForKey:[NSNumber numberWithInteger:index]] != nil) {
+                        cell = [dataSourcePicCellDic objectForKey:[NSNumber numberWithInteger:index]];
+                    }
+                    else{
+                        cell = (ChartCell*)[tableView cellForRowAtIndexPath:indexPath];
+                        isAddToPicDic = YES;
+                    }
+                }
+                 */
                 cell = (ChartCell*)[tableView cellForRowAtIndexPath:indexPath];
             }
             else{//audio
@@ -485,6 +507,9 @@
         
         if (!cell) {
             cell = [[ChartCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
+            if (isAddToPicDic == YES) {
+                [dataSourcePicCellDic setObject:cell forKey:[NSNumber numberWithInteger:self.cellFrames.count - indexPath.row]];
+            }
         }
         cell.cellType = ZBMessageSingle;
         cell.cellFrame = cellFrame;

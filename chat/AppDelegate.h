@@ -63,6 +63,7 @@ enum tagType{weather=0,
 -(void)xmppLogin;
 
 @property(retain,nonatomic) NSMutableArray* downloadUrlAr;
+@property(retain,nonatomic) NSMutableArray* uploadPicAr;
 
 //@property(retain,nonatomic) loginInfo* LoInfo;
 

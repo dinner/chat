@@ -12,6 +12,7 @@
 #import "ContentAudio.h"
 #import "ContentLabel.h"
 
+static s_index=0;
 @interface ChartCell()
 @property(retain,nonatomic) UIImageView* icon;//头像
 @property(retain,nonatomic) UILabel* lbName;//名字
@@ -37,6 +38,7 @@
         self.bubbleView = [[UIImageView alloc] initWithFrame:CGRectZero];
         [self.contentView addSubview:self.bubbleView];
     }
+    NSLog(@"cell创建第%d次",s_index++);
     return self;
 }
 
@@ -147,6 +149,8 @@
     }
     self.contentLabel.cellFrame = self.cellFrame;
     [self.contentLabel setNeedsDisplay];
+    
+//    [self.contentLabel setTheLabel:self.cellFrame.m_mesArray];
 }
 
 -(void)imagePic{

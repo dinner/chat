@@ -86,40 +86,49 @@
 -(void)upload:(UIImage*)image{
     [self addMask];
     
-    AFHTTPRequestOperationManager * manager = [AFHTTPRequestOperationManager manager];
-    AFSecurityPolicy *securityPolicy = [AFSecurityPolicy defaultPolicy];
-    securityPolicy.allowInvalidCertificates = YES;
-    securityPolicy.validatesDomainName = YES;
-    manager.securityPolicy  = securityPolicy;
-    manager.responseSerializer = [AFHTTPResponseSerializer serializer];
-    NSString* strPostUrl = [NSString stringWithFormat:@"%@/imageUpload",SERVER];
-    AFHTTPRequestOperation *o2= [manager POST:strPostUrl parameters:nil                                  constructingBodyWithBlock:^(id<AFMultipartFormData> formData) {
-        NSData * data=UIImagePNGRepresentation(image);
-        [formData appendPartWithFileData:data name:@"file"fileName:@"111icon.png"mimeType:@"image/png"];
-    }success:^(AFHTTPRequestOperation *operation,id responseObject){
-        NSLog(@"%@",[[NSString alloc]initWithData:responseObject encoding:NSUTF8StringEncoding]);
-        [self removeMask];
-        self.m_cellFrame.fileUploadOrDownLoadManager.bIsSuc = YES;
-        NSDictionary* dic = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingMutableContainers error:nil];
-        NSString* strHeadUrl = dic[@"url"];
-        [[NSNotificationCenter defaultCenter] postNotificationName:PIC_SEND_SUC object:nil userInfo:[NSDictionary dictionaryWithObject:strHeadUrl forKey:@"picUrl"]];
-    }failure:^(AFHTTPRequestOperation *operation,NSError *error) {
-        NSLog(@"图片上传失败");
-    }];
-    
-    //设置上传操作的进度
-    [o2 setUploadProgressBlock:^(NSUInteger bytesWritten,long long totalBytesWritten, long long totalBytesExpectedToWrite) {
-        CGFloat progress = totalBytesWritten/totalBytesExpectedToWrite;
-        m_progressView.progressView.progress = progress;
-    }];
-    [o2 resume];
+    //判断该数据源
+    AppDelegate* dele = (AppDelegate*)[UIApplication sharedApplication].delegate;
+    if ([dele.uploadPicAr containsObject:_m_cellFrame] == NO) {
+        AFHTTPRequestOperationManager * manager = [AFHTTPRequestOperationManager manager];
+        AFSecurityPolicy *securityPolicy = [AFSecurityPolicy defaultPolicy];
+        securityPolicy.allowInvalidCertificates = YES;
+        securityPolicy.validatesDomainName = YES;
+        manager.securityPolicy  = securityPolicy;
+        manager.responseSerializer = [AFHTTPResponseSerializer serializer];
+        NSString* strPostUrl = [NSString stringWithFormat:@"%@/imageUpload",SERVER];
+        AFHTTPRequestOperation *o2= [manager POST:strPostUrl parameters:nil                                  constructingBodyWithBlock:^(id<AFMultipartFormData> formData) {
+            NSData * data=UIImageJPEGRepresentation(image,0.01);
+            [formData appendPartWithFileData:data name:@"file"fileName:@"111icon.png"mimeType:@"image/png"];
+        }success:^(AFHTTPRequestOperation *operation,id responseObject){
+            NSLog(@"%@",[[NSString alloc]initWithData:responseObject encoding:NSUTF8StringEncoding]);
+            [self removeMask];
+            self.m_cellFrame.fileUploadOrDownLoadManager.bIsSuc = YES;
+            NSDictionary* dic = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingMutableContainers error:nil];
+            NSString* strHeadUrl = dic[@"url"];
+            if (strHeadUrl != nil) {
+                [dele.uploadPicAr removeObject:_m_cellFrame];
+                [[NSNotificationCenter defaultCenter] postNotificationName:PIC_SEND_SUC object:nil userInfo:[NSDictionary dictionaryWithObject:strHeadUrl forKey:@"picUrl"]];
+            }
+        }failure:^(AFHTTPRequestOperation *operation,NSError *error) {
+            NSLog(@"图片上传失败");
+        }];
+        
+        //设置上传操作的进度
+        [o2 setUploadProgressBlock:^(NSUInteger bytesWritten,long long totalBytesWritten, long long totalBytesExpectedToWrite) {
+            CGFloat progress = totalBytesWritten/totalBytesExpectedToWrite;
+            m_progressView.progressView.progress = progress;
+        }];
+        [o2 resume];
+    }
 }
+
 //下载
 -(void)download:(NSString*)url{
     [self addMask:self.m_cellFrame.fileUploadOrDownLoadManager.fProgress];
+    
     AFdownloadOper* operation;
     NSURLRequest* request;
-    AppDelegate* dele = [UIApplication sharedApplication].delegate;
+    AppDelegate* dele = (AppDelegate*)[UIApplication sharedApplication].delegate;
     if([dele.downloadUrlAr containsObject:url] == YES){
         operation = self.m_cellFrame.downloadOper;
         request = operation.request;
@@ -127,6 +136,12 @@
     else{
         request = [[NSURLRequest alloc] initWithURL:[NSURL URLWithString:url]];
         operation = [[AFdownloadOper alloc] initWithRequest:request];
+        //下载成功
+        AFSecurityPolicy *securityPolicy = [AFSecurityPolicy defaultPolicy];
+        securityPolicy.allowInvalidCertificates = YES;
+        securityPolicy.validatesDomainName = YES;
+        operation.securityPolicy = securityPolicy;
+        
         self.m_cellFrame.downloadOper = operation;
         [dele.downloadUrlAr addObject:url];
     }
@@ -146,13 +161,10 @@
         NSLog(@"is download：%f",fProgredss);
         m_progressView.progressView.progress = fProgredss;
         self.m_cellFrame.fileUploadOrDownLoadManager.fProgress = fProgredss;
-//        self.m_cellFrame.fileUploadOrDownLoadManager.upDownSize = totalBytesRead+fileUploadedSize;
     }];
     
     [operation setCompletionBlockWithSuccess:^(AFHTTPRequestOperation *operation, id responseObject) {
         self.m_cellFrame.image = [UIImage imageWithData:responseObject];
-//        self.m_cellFrame.m_bIsUploadOrDownloadSuc = YES;
-//        [self setImage:self.m_cellFrame.image];
         self.m_cellFrame.fileUploadOrDownLoadManager.bIsSuc = YES;
         //合并下载数据
         NSMutableData* data = [[NSMutableData data] initWithData: self.m_cellFrame.fileUploadOrDownLoadManager.upDownData];
