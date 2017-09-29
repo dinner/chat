@@ -60,12 +60,12 @@
     self.voiceBtn=[self buttonWith:@"vioce_icon.png"hightLight:nil action:@selector(voiceBtnPress:)];
     [self.voiceBtn setImage:[UIImage imageNamed:@"bar_keyboard.png"] forState:UIControlStateSelected];
     [self.voiceBtn setFrame:CGRectMake(0,0, 33, 33)];
-    [self.voiceBtn setCenter:CGPointMake(30, self.frame.size.height*0.5)];
+    [self.voiceBtn setCenter:CGPointMake(27, self.frame.size.height*0.5)];
     [self addSubview:self.voiceBtn];
     
-    self.textField=[[UITextField alloc]initWithFrame:CGRectMake(0, 0, 180, self.frame.size.height*0.8)];
+    self.textField=[[UITextField alloc]initWithFrame:CGRectMake(50, 0, self.frame.size.width-130, self.frame.size.height*0.8)];
     self.textField.returnKeyType=UIReturnKeySend;
-    self.textField.center=CGPointMake(145, self.frame.size.height*0.5);
+    self.textField.center=CGPointMake(self.textField.center.x, self.frame.size.height*0.5);
     self.textField.font=[UIFont fontWithName:@"HelveticaNeue" size:14];
     self.textField.placeholder=@"请输入";
     self.textField.leftView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 10, 0)];
@@ -82,13 +82,13 @@
     self.imageBtn=[self buttonWith:@"smiley_normail" hightLight:nil action:@selector(imageBtnPress:)];
     [self.imageBtn setImage:[UIImage imageNamed:@"bar_keyboard.png"] forState:UIControlStateSelected];
     [self.imageBtn setFrame:CGRectMake(0, 0, 33, 33)];
-    [self.imageBtn setCenter:CGPointMake(260, self.frame.size.height*0.5)];
+    [self.imageBtn setCenter:CGPointMake(self.frame.size.width-58, self.frame.size.height*0.5)];
     [self addSubview:self.imageBtn];
     
     self.addBtn=[self buttonWith:@"bar_add.png" hightLight:nil action:@selector(addBtnPress:)];
     [self.addBtn setImage:[UIImage imageNamed:@"bar_keyboard.png"] forState:UIControlStateSelected];
     [self.addBtn setFrame:CGRectMake(0, 0, 33, 33)];
-    [self.addBtn setCenter:CGPointMake(300, self.frame.size.height*0.5)];
+    [self.addBtn setCenter:CGPointMake(self.frame.size.width-20, self.frame.size.height*0.5)];
     [self addSubview:self.addBtn];
     
     self.speakBtn=[self buttonWith:nil hightLight:nil action:@selector(speakBtnPress:)];

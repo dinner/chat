@@ -47,6 +47,6 @@
 
 @property(retain,nonatomic) AFdownloadOper* downloadOper;
 
--(NSArray*)doo:(NSString *)str;
+//-(NSArray*)doo:(NSString *)str;
 
 @end

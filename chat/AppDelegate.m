@@ -26,6 +26,7 @@
 //#import "NSData+AES256.h"
 //#import "baseNavController.h"
 #import "Reachability.h"
+#import "AFNetworking.h"
 
 @implementation AppDelegate
 @synthesize navController;

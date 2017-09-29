@@ -36,9 +36,11 @@
     label.clipsToBounds = YES;
     label.backgroundColor = SDColorMaker(255, 255, 255, 0.7);
     
+    /*
     UIWindow *keyWindow = [UIApplication sharedApplication].keyWindow;
     [keyWindow addSubview:label];
     label.center = keyWindow.center;
+     */
     
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         [label removeFromSuperview];

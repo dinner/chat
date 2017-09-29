@@ -36,6 +36,7 @@ static s_index=0;
         self.icon = [[UIImageView alloc] init];
         [self.contentView addSubview:self.icon];
         self.bubbleView = [[UIImageView alloc] initWithFrame:CGRectZero];
+        [self.bubbleView setUserInteractionEnabled:YES];
         [self.contentView addSubview:self.bubbleView];
     }
     NSLog(@"cell创建第%d次",s_index++);
@@ -121,7 +122,6 @@ static s_index=0;
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {
     [super setSelected:selected animated:animated];
 
-    // Configure the view for the selected state
 }
 
 #pragma mark 
@@ -181,7 +181,7 @@ static s_index=0;
         
         self.contentAudioView.audioType = self.cellFrame.m_audioSource;
         self.contentAudioView.strUrl = self.cellFrame.m_strAudioUrl;
-        [self addSubview:self.contentAudioView];
+        [self.bubbleView addSubview:self.contentAudioView];
         ChartMessageType FromOrToType = _cellFrame.chartMessage.messageType;
         if (FromOrToType == kMessageFrom) {
             self.contentAudioView.frame = CGRectMake(15, 5, 30.f, 30.f);

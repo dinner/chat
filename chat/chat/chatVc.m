@@ -69,14 +69,16 @@
     UIWindow* window = dele.window;
     CGRect oriRect = [imgView convertRect:imgView.bounds toView:window];//关键代码，坐标系转换
     UIImageView* copySmall = [[UIImageView alloc] init];
-    [copySmall setImage:imgView.image];
+//    copySmall.layer.borderColor = [UIColor redColor].CGColor;
+//    copySmall.layer.borderWidth = 1.f;
+    [copySmall setContentMode:UIViewContentModeScaleAspectFill];
     [copySmall setFrame:oriRect];
-    [copySmall setContentMode:UIViewContentModeScaleToFill];
+    [copySmall setImage:imgView.image];
     
     UIView* backView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, ScreenWidth, ScreenHeight)];
     UITapGestureRecognizer* tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(backClicked:)];
     [backView addGestureRecognizer:tap];
-    [backView setBackgroundColor:[UIColor colorWithRed:0 green:0 blue:0 alpha:0]];
+    [backView setBackgroundColor:[UIColor colorWithRed:0 green:0 blue:0 alpha:0.5f]];
     
     [window addSubview:backView];
     [backView addSubview:copySmall];
@@ -85,6 +87,8 @@
     UIImage* image = imgView.image;
     CGFloat picHeight = image.size.height;
     CGFloat picWidth = image.size.width;
+//    CGFloat picHeight = oriRect.size.height;
+//    CGFloat picWidth = oriRect.size.width;
     CGFloat bigPicW;
     CGFloat bigPicH;
     if (picHeight/picWidth < ScreenHeight/ScreenWidth) {
@@ -96,7 +100,7 @@
         bigPicW = picWidth*ScreenHeight/picHeight;
     }
     
-    [UIView animateWithDuration:0.5f animations:^{
+    [UIView animateWithDuration:0.3f animations:^{
         [copySmall setFrame:CGRectMake(0, 0, bigPicW, bigPicH)];
         [copySmall setCenter:window.center];
         [backView setBackgroundColor:[UIColor colorWithRed:0 green:0 blue:0 alpha:0.5f]];
@@ -524,38 +528,10 @@
 }
 
 #pragma mark keyboradDelegate
-//- (NSDictionary *)audioRecordingSettings{
-//    
-//    NSDictionary *result = nil;
-//    
-//    NSMutableDictionary *settings = [[NSMutableDictionary alloc] init] ;//录音时所必需的参数设置
-//    
-//    [settings setValue:[NSNumber numberWithInteger:kAudioFormatLinearPCM]
-//                forKey:AVFormatIDKey];
-//    
-//    [settings setValue:[NSNumber numberWithFloat:8000] forKey:AVSampleRateKey];
-//    
-//    [settings setValue:[NSNumber numberWithInteger:1] forKey:AVNumberOfChannelsKey];
-//    
-//    [settings setValue:[NSNumber numberWithInteger:AVAudioQualityLow]
-//                forKey:AVEncoderAudioQualityKey];
-//    
-//    result = [NSDictionary dictionaryWithDictionary:settings];
-//    
-//    return (result);
-//}
 
 //开始录音
 -(void)beginRecord{
-//    NSDictionary *settings=[NSDictionary dictionaryWithObjectsAndKeys:
-//                            [NSNumber numberWithFloat:8000],AVSampleRateKey,
-//                            [NSNumber numberWithInt:kAudioFormatLinearPCM],AVFormatIDKey,
-//                            [NSNumber numberWithInt:2],AVNumberOfChannelsKey,
-//                            [NSNumber numberWithInt:8],AVLinearPCMBitDepthKey,
-//                            [NSNumber numberWithBool:NO],AVLinearPCMIsBigEndianKey,
-//                            [NSNumber numberWithBool:NO],AVLinearPCMIsFloatKey,
-//                            nil];
-    
+    [util showTheMbprogressView:@"正在录音" view:self.view];
     NSMutableDictionary * recordSetting = [NSMutableDictionary dictionary];
         [recordSetting setValue :[NSNumber numberWithInt:kAudioFormatLinearPCM] forKey:AVFormatIDKey];//
         [recordSetting setValue:[NSNumber numberWithFloat:8000.0] forKey:AVSampleRateKey];//采样率
@@ -596,65 +572,52 @@
         [recorder stop];
     }
     recorder = nil;
-    
-    //保存到数据源
-    /*
-    NSString* userHead = [[NSUserDefaults standardUserDefaults] objectForKey:@"userHead"];
-    ChartCellFrame *cellFrame=[[ChartCellFrame alloc]init];
-    ChartMessage *chartMessage=[[ChartMessage alloc]init];
-    
-    chartMessage.icon = userHead;
-    chartMessage.messageType = kMessageTo;
-    chartMessage.content = audioFileName;
-    chartMessage.date = [NSDate date];
-    chartMessage.mesType = e_audio;
-    chartMessage.audioType = e_localAudio;
-    cellFrame.chartMessage = chartMessage;
-    [self.cellFrames addObject:cellFrame];
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [self.tableView reloadData];
-    });
-    */
-    
+//    
+//    ChartCellFrame *cellFrame=[[ChartCellFrame alloc]init];
+//    ChartMessage *chartMessage=[[ChartMessage alloc]init];
+//    chartMessage.icon = [[NSUserDefaults standardUserDefaults] objectForKey:@"userHead"];;
+//    chartMessage.messageType = kMessageTo;
+//    chartMessage.content = ;
+//    chartMessage.date = [NSDate date];
+//    chartMessage.mesType = e_audio;
+//    cellFrame.chartMessage = chartMessage;
+//    [self.cellFrames addObject:cellFrame];
+//    dispatch_async(dispatch_get_main_queue(), ^{
+//        [self.tableView reloadData];
+//    });
+//    
     BOOL isTransSuc = [self cafToMp3];
-    
-    //发送音频到服务器
-    AFHTTPRequestOperationManager * manager = [AFHTTPRequestOperationManager manager];
-    manager.responseSerializer = [AFHTTPResponseSerializer serializer];
-    NSString* strPostUrl = [NSString stringWithFormat:@"%@/imageUpload",SERVER];
-    AFHTTPRequestOperation  * o2= [manager POST:strPostUrl parameters:nil                                  constructingBodyWithBlock:^(id<AFMultipartFormData> formData) {
-//        NSData * data=UIImagePNGRepresentation(image);
-        NSData* data = [NSData dataWithContentsOfFile:mp3FileName];
-        [formData appendPartWithFileData:data name:@"file"fileName:@"audio.mp3"mimeType:@"audio/mp3"];
-    }success:^(AFHTTPRequestOperation *operation,id responseObject){
-        NSLog(@"%@",[[NSString alloc]initWithData:responseObject encoding:NSUTF8StringEncoding]);
-        NSDictionary* dic = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingMutableContainers error:nil];
-        NSString* strAudio = dic[@"url"];
-        strAudio = [NSString stringWithFormat:@"%@/%@",IMGSERVER,strAudio];
-        //上传完成保存到数据库
-//        [self saveInfoToDb:strAudio type:e_audio from:self.m_strSelfId to:self.m_strFriendId];
-        //发送音频
-        [self mesSend:strAudio mesType:e_audio];
-    }failure:^(AFHTTPRequestOperation *operation,NSError *error) {
+    if (isTransSuc == YES) {
+        //发送音频到服务器
+        AFHTTPRequestOperationManager * manager = [AFHTTPRequestOperationManager manager];
         
-    }];
-    
-    //设置上传操作的进度
-    [o2 setUploadProgressBlock:^(NSUInteger bytesWritten,long long totalBytesWritten, long long totalBytesExpectedToWrite) {
-        CGFloat progress = totalBytesWritten/totalBytesExpectedToWrite;
-    }];
-    [o2 resume];
-
-//    NSURL* url = [NSURL fileURLWithPath:audioFileName];
-//    FSAudioStream* audio = [[FSAudioStream alloc] initWithUrl:url];
-//    audio.onFailure = ^(FSAudioStreamError error,NSString *description){
-//        NSLog(@"");
-//    };
-//    audio.onCompletion = ^{
-//        NSLog(@"完成");
-//    };
-//    [audio setVolume:0.5f];
-//    [audio play];
+        AFSecurityPolicy *securityPolicy = [AFSecurityPolicy defaultPolicy];
+        securityPolicy.allowInvalidCertificates = YES;
+        securityPolicy.validatesDomainName = YES;
+        manager.securityPolicy  = securityPolicy;
+        
+        manager.responseSerializer = [AFHTTPResponseSerializer serializer];
+        NSString* strPostUrl = [NSString stringWithFormat:@"%@/imageUpload",SERVER];
+        AFHTTPRequestOperation  * o2= [manager POST:strPostUrl parameters:nil                                  constructingBodyWithBlock:^(id<AFMultipartFormData> formData) {
+            NSData* data = [NSData dataWithContentsOfFile:mp3FileName];
+            [formData appendPartWithFileData:data name:@"file"fileName:@"audio.mp3"mimeType:@"audio/mp3"];
+        }success:^(AFHTTPRequestOperation *operation,id responseObject){
+            NSLog(@"%@",[[NSString alloc]initWithData:responseObject encoding:NSUTF8StringEncoding]);
+            NSDictionary* dic = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingMutableContainers error:nil];
+            NSString* strAudio = dic[@"url"];
+            strAudio = [NSString stringWithFormat:@"%@/%@",IMGSERVER,strAudio];
+            [self mesSend:strAudio mesType:e_audio];
+        }failure:^(AFHTTPRequestOperation *operation,NSError *error) {
+            NSLog(@"录音上传失败");
+        }];
+        
+        //设置上传操作的进度
+        [o2 setUploadProgressBlock:^(NSUInteger bytesWritten,long long totalBytesWritten, long long totalBytesExpectedToWrite) {
+            CGFloat progress = totalBytesWritten/totalBytesExpectedToWrite;
+            NSLog(@"%.2f",progress);
+        }];
+        [o2 resume];
+    }
 }
 
 -(BOOL)cafToMp3{
@@ -994,8 +957,6 @@
     chartMessage.image = image;
     cellFrame.chartMessage = chartMessage;
     [self.cellFrames addObject:cellFrame];
-//    //存储到数据库
-//    [self saveInfoToDb:strFileUrl type:e_pic from:self.m_strSelfId to:self.m_strFriendId];
     [picker dismissViewControllerAnimated:YES completion:^{
         [self messageViewAnimationWithMessageRect:CGRectZero withMessageInputViewRect:self.keyBordView.frame andDuration:0.25f andState:ZBMessageViewStateShowNone];
     }];

@@ -32,19 +32,23 @@
 -(id)init{
     self = [super init];
     if (self) {
-//        self.bIsUploadOrDownload = NO;
         self.layer.cornerRadius = 3.f;
         self.layer.masksToBounds = YES;
         
         self.userInteractionEnabled = YES;
         UITapGestureRecognizer* tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(imgCLicked:)];
         [self addGestureRecognizer:tap];
+        
+        self.contentMode = UIViewContentModeScaleAspectFill;
     }
     return self;
 }
 
 -(void)imgCLicked:(id)sender{
-    [[NSNotificationCenter defaultCenter] postNotificationName:IMG_CLICKED object:self];
+    if (self.m_cellFrame.fileUploadOrDownLoadManager.bIsSuc == YES) {
+        [[NSNotificationCenter defaultCenter] postNotificationName:IMG_CLICKED object:self];
+
+    }
 }
 
 -(void)addMask:(CGFloat)fProgress{

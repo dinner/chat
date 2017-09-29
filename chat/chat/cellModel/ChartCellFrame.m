@@ -70,13 +70,14 @@
     }
     
     self.chartViewRect=CGRectMake(contentX, contentY, size.width+28.f, size.height+30);
-    self.cellHeight=MAX(CGRectGetMaxY(self.iconRect), CGRectGetMaxY(self.chartViewRect))+kIconMarginX+18.f;
     
     if (chartMessage.mesType == e_timeInterval) {
         self.cellHeight = TIME_CELLHEIGHT;
     }
+    else{
+        self.cellHeight=MAX(CGRectGetMaxY(self.iconRect), CGRectGetMaxY(self.chartViewRect))+kIconMarginX+18.f;
+    }
 }
-
 
 //将文本解析
 -(NSArray*)analysisTextToArray:(NSString *)atstring
