@@ -71,6 +71,7 @@
     UIImageView* copySmall = [[UIImageView alloc] init];
 //    copySmall.layer.borderColor = [UIColor redColor].CGColor;
 //    copySmall.layer.borderWidth = 1.f;
+    copySmall.clipsToBounds = YES;
     [copySmall setContentMode:UIViewContentModeScaleAspectFill];
     [copySmall setFrame:oriRect];
     [copySmall setImage:imgView.image];
