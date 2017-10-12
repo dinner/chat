@@ -2,7 +2,7 @@
 //  ChatListCell.m
 //  UINavigationTest
 //
-//  Created by zhanglingxiang on 15/8/19.
+//  Created by James on 15/8/19.
 //  Copyright (c) 2015年 caobo. All rights reserved.
 //
 

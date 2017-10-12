@@ -2,7 +2,7 @@
 //  ChartCell.h
 //  UINavigationTest
 //
-//  Created by zhanglingxiang on 15/8/17.
+//  Created by James on 15/8/17.
 //  Copyright (c) 2015年 caobo. All rights reserved.
 //
 

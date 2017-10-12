@@ -2,7 +2,7 @@
 //  officialContentView.h
 //  CalendarDiary
 //
-//  Created by zhanglingxiang on 15/9/25.
+//  Created by James on 15/9/25.
 //  Copyright (c) 2015年 caobo. All rights reserved.
 //
 
