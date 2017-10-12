@@ -140,7 +140,6 @@
     else{
         request = [[NSURLRequest alloc] initWithURL:[NSURL URLWithString:url]];
         operation = [[AFdownloadOper alloc] initWithRequest:request];
-        //下载成功
         AFSecurityPolicy *securityPolicy = [AFSecurityPolicy defaultPolicy];
         securityPolicy.allowInvalidCertificates = YES;
         securityPolicy.validatesDomainName = YES;
