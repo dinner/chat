@@ -18,4 +18,6 @@
 -(void)setLocalImage:(UIImage*)image;
 -(void)setRemoteImage:(NSString*)url;
 
+-(id)getProgressView;
+
 @end

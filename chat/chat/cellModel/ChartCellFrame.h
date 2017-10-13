@@ -11,13 +11,14 @@
 #import "fileUploadOrDownload.h"
 #import "AFNetworking.h"
 #import "AFdownloadOper.h"
+//#import "ContentPic.h"
 
 #define TIME_CELLHEIGHT     45.f
 //enum typeMes{
 //  e_text,e_pic,e_audio
 //};
 
-
+@class ContentPic;
 @interface ChartCellFrame : NSObject
 @property (nonatomic,assign) CGRect iconRect;
 @property (nonatomic,assign) CGRect chartViewRect;
@@ -46,6 +47,9 @@
 @property(retain,nonatomic) NSString* m_userName;
 
 @property(retain,nonatomic) AFdownloadOper* downloadOper;
+@property(retain,nonatomic) AFHTTPRequestOperation* uploadOper;
+
+@property(weak,nonatomic) ContentPic* contentPic;
 
 //-(NSArray*)doo:(NSString *)str;
 

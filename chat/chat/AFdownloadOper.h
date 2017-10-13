@@ -13,7 +13,7 @@
 
 @interface AFdownloadOper : AFHTTPRequestOperation
 
-@property(retain,nonatomic) SDDemoItemView* progressView;
+@property(retain,nonatomic) SDBaseProgressView* progressView;
 //@property(retain,nonatomic) ChartCellFrame* m_cellFrame;
 
 @end

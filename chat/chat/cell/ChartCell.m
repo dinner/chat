@@ -39,7 +39,10 @@ static s_index=0;
         [self.bubbleView setUserInteractionEnabled:YES];
         [self.contentView addSubview:self.bubbleView];
     }
-    NSLog(@"cell创建第%d次",s_index++);
+//    NSLog(@"cell创建第%d次",s_index++);
+    if ([reuseIdentifier isEqualToString:@"To_pic"]) {
+        NSLog(@"To_pic创建第%d次",s_index++);
+    }
     return self;
 }
 

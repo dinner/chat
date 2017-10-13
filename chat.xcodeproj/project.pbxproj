@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1A2DFBEF1F8F79A400EBD9D6 /* downloadOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 1A2DFBEE1F8F79A400EBD9D6 /* downloadOperation.m */; };
 		7B7948A31E9C67820036B385 /* libc++.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 7B7948A21E9C67820036B385 /* libc++.tbd */; };
 		7B7948A61E9C6CEC0036B385 /* Model.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 7B7948A41E9C6CEC0036B385 /* Model.xcdatamodeld */; };
 		7B7948B81E9C7E540036B385 /* FaceBoard.m in Sources */ = {isa = PBXBuildFile; fileRef = 7B7948B71E9C7E540036B385 /* FaceBoard.m */; };
@@ -399,6 +400,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		1A2DFBED1F8F79A400EBD9D6 /* downloadOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = downloadOperation.h; sourceTree = "<group>"; };
+		1A2DFBEE1F8F79A400EBD9D6 /* downloadOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = downloadOperation.m; sourceTree = "<group>"; };
 		7B7948A21E9C67820036B385 /* libc++.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = "libc++.tbd"; path = "usr/lib/libc++.tbd"; sourceTree = SDKROOT; };
 		7B7948A51E9C6CEC0036B385 /* Model.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Model.xcdatamodel; sourceTree = "<group>"; };
 		7B7948A71E9C6E390036B385 /* chat-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "chat-Bridging-Header.h"; sourceTree = "<group>"; };
@@ -1131,6 +1134,8 @@
 				7B84319E1E972C7A001961B1 /* officialChatCell.xib */,
 				7B84319F1E972C7A001961B1 /* officialContentView.h */,
 				7B8431A01E972C7A001961B1 /* officialContentView.m */,
+				1A2DFBED1F8F79A400EBD9D6 /* downloadOperation.h */,
+				1A2DFBEE1F8F79A400EBD9D6 /* downloadOperation.m */,
 			);
 			path = cell;
 			sourceTree = "<group>";
@@ -2630,6 +2635,7 @@
 				7B8435591E972E30001961B1 /* DDXMLElement.m in Sources */,
 				7B8433951E972D73001961B1 /* AFHTTPRequestOperation.m in Sources */,
 				7B8434EB1E972E2F001961B1 /* NSXMLElement+XMPP.m in Sources */,
+				1A2DFBEF1F8F79A400EBD9D6 /* downloadOperation.m in Sources */,
 				7B8435141E972E2F001961B1 /* XMPPMessage+XEP0045.m in Sources */,
 				7B84350C1E972E2F001961B1 /* XMPPRoomOccupantCoreDataStorageObject.m in Sources */,
 				7B84356D1E9732BB001961B1 /* util.m in Sources */,

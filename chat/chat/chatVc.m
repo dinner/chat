@@ -101,7 +101,7 @@
         bigPicW = picWidth*ScreenHeight/picHeight;
     }
     
-    [UIView animateWithDuration:0.3f animations:^{
+    [UIView animateWithDuration:.3f animations:^{
         [copySmall setFrame:CGRectMake(0, 0, bigPicW, bigPicH)];
         [copySmall setCenter:window.center];
         [backView setBackgroundColor:[UIColor colorWithRed:0 green:0 blue:0 alpha:0.5f]];
@@ -252,14 +252,14 @@
             ChartCellFrame* cellFrameFar = [self.cellFrames objectAtIndex:0];
             dateDataSource = cellFrameFar.chartMessage.date;
             dateDataKu = mesFirstObject.date;
-            
+            /*
             NSLog(@"\n数据源最小时间：%@ \n数据库查找到的数据的时间：%@\n内容：%@",dateDataSource,dateDataKu,mes.content);
             NSLog(@"%d",chartMessage.mesType);
+             */
         }
-        NSString* strDateDataSource = [util dateToString:dateDataSource formate:@"yyyy-MM-dd HH:mm:ss zzz"];
-        NSString* strDateDataKu = [util dateToString:dateDataKu formate:@"yyyy-MM-dd HH:mm:ss zzz"];
+        NSString* strDateDataSource = [util dateToString:dateDataSource formate:@"yyyy-MM-dd HH:mm:ss.SSS"];
+        NSString* strDateDataKu = [util dateToString:dateDataKu formate:@"yyyy-MM-dd HH:mm:ss.SSS"];
         if (([dateDataSource compare:dateDataKu] == NSOrderedDescending) && (![strDateDataKu isEqualToString: strDateDataSource])) {
-            if (mes.type != e_timeInterval){//不是时间
                 if (mes.type != e_timeInterval) {//不是时间
                     NSString* strFrom = mes.from;
                     NSString* strHead = [configDic objectForKey:@"selfUserHeaderUrl"];
@@ -267,7 +267,6 @@
                     if (mes.type == e_pic) {//图片
                         chartMessage.picType = e_serverImg;
                     }
-
                     if ([strFrom isEqualToString:self.m_strSelfId]) {
                         chartMessage.messageType = kMessageTo;
                         chartMessage.icon = strHead;
@@ -287,7 +286,6 @@
                 [self.cellFrames insertObject:cellFrame atIndex:0];
         }
     }
-    }
     //刷新table
     dispatch_async(dispatch_get_main_queue(), ^{
         [self.tableView reloadData];
@@ -298,7 +296,6 @@
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
-
 
 #pragma mark notification
 //图片上传成功
@@ -468,12 +465,15 @@
             }
             else if (cellFrame.chartMessage.mesType == e_pic){//pic
                 cellIdentifier = @"From_pic";
+                /*
                 if (cellFrame.fileUploadOrDownLoadManager.bIsSuc == YES) {
                     cell = (ChartCell*)[tableView dequeueReusableCellWithIdentifier:cellIdentifier];
                 }
                 else{
                     cell = (ChartCell*)[tableView cellForRowAtIndexPath:indexPath];
                 }
+                 */
+                cell = (ChartCell*)[tableView dequeueReusableCellWithIdentifier:cellIdentifier];
             }
             else{//audio
                 cellIdentifier = @"From_audio";
@@ -487,22 +487,7 @@
             }
             else if (cellFrame.chartMessage.mesType == e_pic){//pic
                 cellIdentifier = @"To_pic";
-                /*
-                if (cellFrame.fileUploadOrDownLoadManager.bIsSuc == YES) {
-                    cell = (ChartCell*)[tableView dequeueReusableCellWithIdentifier:cellIdentifier];
-                }
-                else{
-                    NSUInteger index = self.cellFrames.count - indexPath.row;
-                    if ([dataSourcePicCellDic objectForKey:[NSNumber numberWithInteger:index]] != nil) {
-                        cell = [dataSourcePicCellDic objectForKey:[NSNumber numberWithInteger:index]];
-                    }
-                    else{
-                        cell = (ChartCell*)[tableView cellForRowAtIndexPath:indexPath];
-                        isAddToPicDic = YES;
-                    }
-                }
-                 */
-                cell = (ChartCell*)[tableView cellForRowAtIndexPath:indexPath];
+                cell = (ChartCell*)[tableView dequeueReusableCellWithIdentifier:cellIdentifier];
             }
             else{//audio
                 cellIdentifier = @"To_audio";
@@ -512,9 +497,6 @@
         
         if (!cell) {
             cell = [[ChartCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
-            if (isAddToPicDic == YES) {
-                [dataSourcePicCellDic setObject:cell forKey:[NSNumber numberWithInteger:self.cellFrames.count - indexPath.row]];
-            }
         }
         cell.cellType = ZBMessageSingle;
         cell.cellFrame = cellFrame;
@@ -871,7 +853,7 @@
             NSLog(@"error");
         }
         else{
-            NSLog(@"插入成功");
+            NSLog(@"时间插入成功");
         }
     }
 }
